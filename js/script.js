@@ -27,7 +27,15 @@ const pagesCount = heroItems.length;
 lastPage.innerText = `0${pagesCount}`;
 
 const scrollHeight = scroll.offsetHeight;
-activeScroll.style.height = `${scrollHeight / pagesCount}px`;
+const mediaQuery = window.matchMedia('(max-width: 1380px)');
+
+if (mediaQuery.matches) {
+  const scrollWidth = scroll.offsetWidth;
+  activeScroll.style.width = `clamp(2px, 15vw, ${scrollWidth / pagesCount}px)`;
+  activeScroll.style.height = '4px';
+} else {
+  activeScroll.style.height = `${scrollHeight / pagesCount}px`;
+}
 
 const onPageChange = () => {
   let i = Number(pageNumber.innerText.slice(1));
@@ -40,7 +48,14 @@ const onPageChange = () => {
   text.innerText = heroItems[i].text;
   pageNumber.innerText = `0${i + 1}`;
   footerPageNumber.innerText = `0${i + 1}`;
-  activeScroll.style.transform = `translateY(${i * scrollHeight / pagesCount}px)`;
+
+  if (mediaQuery.matches) {
+    const scrollWidth = scroll.offsetWidth;
+    activeScroll.style.transform = `translateX(${i * scrollWidth / pagesCount}px)`;
+    activeScroll.style.height = '4px';
+  } else {
+    activeScroll.style.transform = `translateY(${i * scrollHeight / pagesCount}px)`;
+  }
 
   if (pageNumber.innerText === `0${pagesCount}`) {
     lastPage.style.opacity = '1';
